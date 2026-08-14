@@ -1,79 +1,79 @@
-# 🎓 CMU Smart Scheduler (AI Chatbot)
-**ระบบผู้ช่วยอัจฉริยะเพื่อการวางแผนการศึกษาและจัดตารางเรียน มหาวิทยาลัยเชียงใหม่**
+# 🎓 CMU SMART SCHEDULER (AI CHATBOT)
+**An Intelligent Assistant System for Educational Planning and Course Scheduling at Chiang Mai University**
 
-โปรเจกต์นี้คือระบบ (Proof of Concept) สำหรับสกัดข้อมูลหลักสูตรทุกคณะในมหาวิทยาลัยเชียงใหม่โดยอัตโนมัติ เพื่อสร้าง AI Chatbot ที่จะช่วยนักศึกษาจัดตารางเรียน แนะนำวิชาสำรอง และตรวจสอบสถานะการขอจบการศึกษา
-
----
-
-## 🛠️ สถาปัตยกรรมระบบ (System Architecture)
-ระบบแบ่งออกเป็น 3 ส่วนหลัก (Microservices):
-1. **Data Ingestion (Backend Pipeline):** ระบบสกัดข้อมูลจาก PDF และ Web Scraping
-2. **AI Logic Engine (Core Brain):** ระบบคำนวณเงื่อนไขและจัดตารางเรียน
-3. **Frontend Interface:** ระบบโต้ตอบกับผู้ใช้ผ่านแพลตฟอร์มสนทนา (LINE OA / Discord) หรือ Web App
+This project is a Proof of Concept (PoC) system for automatically extracting curriculum data from all faculties at Chiang Mai University. The goal is to build an AI Chatbot that helps students schedule classes, recommends backup courses, and checks graduation status.
 
 ---
 
-## 📅 แผนการพัฒนาแบบละเอียด (Detailed Roadmap)
-
-### Phase 1: การจัดการข้อมูลพื้นฐาน (Data Infrastructure)
-เป้าหมาย: สร้างฐานข้อมูล (Modular Knowledge Base) ที่เครื่องคอมพิวเตอร์สามารถนำไปคำนวณต่อได้
-*   **Task 1.1: Automated Curriculum Extractor (Python)**
-    *   เขียนสคริปต์ (เช่น `pdfplumber` หรือ `PyMuPDF`) อ่านไฟล์ PDF หลักสูตรของมหาวิทยาลัย
-    *   หรือใช้ LLM API (Gemini/GPT-4) อ่าน PDF และแปลงโครงสร้างเป็นรูปแบบ `JSON` (วิชาแกน, วิชาโท, GE, วิชาบังคับก่อน)
-*   **Task 1.2: Schedule Web Scraper (Python)**
-    *   เขียนบอท (เช่น `BeautifulSoup` หรือ `Selenium`) ดึงข้อมูล "ตารางเปิดสอน" จากเว็บไซต์สำนักทะเบียน มช.
-    *   ดึงฟิลด์: รหัสวิชา, เซคชั่น, วัน-เวลาเรียน, วัน-เวลาสอบ, สถานะที่นั่ง
-
-### Phase 2: พัฒนาสมองกลหลัก (Core AI Logic)
-เป้าหมาย: สร้างโปรแกรมตรวจสอบเงื่อนไขและจัดตาราง
-*   **Task 2.1: Prerequisite Checker**
-    *   เขียนลอจิกรับข้อมูล Transcript ของนักศึกษา (Mock Data) มาเช็คว่าผ่านวิชาตัวต่อหรือยัง ป้องกันการลงทะเบียนข้ามสเต็ป
-*   **Task 2.2: Degree Audit (ตะกร้าหน่วยกิต)**
-    *   นับหน่วยกิตวิชาเอก วิชาโท และ GE ที่สอบผ่านแล้ว พร้อมคำนวณว่าขาดอีกกี่หน่วยกิตในแต่ละหมวด
-*   **Task 2.3: Smart Schedule Builder**
-    *   อัลกอริทึมจับคู่ "วิชาที่ต้องเรียน" เข้ากับ "ตารางสอนที่เปิดในเทอมนี้" โดยล็อกเวลาเรียนไม่ให้ชนกัน 
-
-### Phase 3: พัฒนาฟีเจอร์ช่วยเหลือฉุกเฉิน (Advanced Features)
-เป้าหมาย: ตอบโจทย์ Pain points จริงช่วงลงทะเบียน
-*   **Task 3.1: Exam Clash Detector**
-    *   เพิ่มลอจิกสแกน "ตารางสอบกลางภาค/ปลายภาค" เพื่อกรองวิชาที่มีตารางสอบทับซ้อนกันออกไป
-*   **Task 3.2: Plan B Suggester**
-    *   ระบบเตรียมตัวเลือกสำรอง (Fallback options) ทันทีในหมวด GE เดียวกัน กรณีเซคชั่นเป้าหมายเต็ม
-*   **Task 3.3: Graduation Mock-up**
-    *   สคริปต์ Checklist สรุปสถานะก่อนขอจบการศึกษา
-
-### Phase 4: การเชื่อมต่อระบบ (Integration & API)
-เป้าหมาย: นำลอจิกทั้งหมดมาเชื่อมโยงกันให้เรียกใช้งานได้
-*   **Task 4.1: สร้าง RESTful API (FastAPI)**
-    *   นำโค้ดใน Phase 2 & 3 มาห่อด้วย `FastAPI` เพื่อสร้าง Endpoint รอรับคำสั่ง (เช่น `/api/schedule`, `/api/audit`)
-*   **Task 4.2: AI Controller**
-    *   เขียน Prompt หุ้มระบบ เพื่อให้ AI สามารถแปลคำสั่งภาษาพูดของนักศึกษา แล้วไปเรียกใช้ API ได้อย่างถูกต้อง
-
-### Phase 5: หน้าบ้านและผู้ใช้งาน (Frontend & UX)
-เป้าหมาย: สร้างหน้าต่างให้ผู้ใช้เข้ามาใช้งานจริง
-*   **Task 5.1: LINE Chatbot Setup**
-    *   สร้าง LINE Official Account, นำ Webhook มาต่อกับ API ของเรา (ผ่าน `ngrok` สำหรับเทสต์ในเครื่อง หรือ Deploy บน Render/Heroku)
-*   **Task 5.2: Transcript Uploader (LIFF / Web App)**
-    *   สร้างหน้าเว็บเล็กๆ (HTML/JS) ให้เด็กกดอัปโหลดไฟล์ PDF (Transcript) ของตัวเองเข้าไปประมวลผล
+## 🛠️ SYSTEM ARCHITECTURE
+The system is divided into 3 main components (Microservices):
+1. **DATA INGESTION (Backend Pipeline):** A system for extracting data via PDF parsing and Web Scraping.
+2. **AI LOGIC ENGINE (Core Brain):** A system for calculating conditions and scheduling classes.
+3. **FRONTEND INTERFACE:** A user interaction system via conversational platforms (LINE OA / Discord) or a Web App.
 
 ---
 
-## 👥 การแบ่งงานสำหรับทีม 2 คน (Task Delegation)
-เพื่อให้ทำงานขนานกันไปได้และลดปัญหา Git Conflict แนะนำให้แบ่งดังนี้:
+## 📅 DETAILED ROADMAP
 
-**🧑‍💻 คนที่ 1 (Data & Backend Engineer):** 
-*   **รับผิดชอบ:** Phase 1 และ Phase 4
-*   **งานหลัก:** ทำให้มั่นใจว่าเรามีฐานข้อมูล JSON ที่ถูกต้อง และเขียน API รอรับคำสั่ง
-*   **โฟลเดอร์ทำงาน:** `/data_pipeline`, `/api`
+### PHASE 1: DATA INFRASTRUCTURE
+**Goal:** Build a Modular Knowledge Base that computers can process further.
+*   **TASK 1.1: Automated Curriculum Extractor (Python)**
+    *   Write scripts (e.g., `pdfplumber` or `PyMuPDF`) to read the university's curriculum PDF files.
+    *   Or use an LLM API (Gemini/GPT-4) to read the PDF and convert the structure into a `JSON` format (core courses, minor courses, GE, prerequisites).
+*   **TASK 1.2: Schedule Web Scraper (Python)**
+    *   Write a bot (e.g., `BeautifulSoup` or `Selenium`) to scrape "course offerings/schedules" data from the CMU Registration Office website.
+    *   Extract fields: Course code, section, class day-time, exam day-time, and seat availability.
 
-**🧑‍💻 คนที่ 2 (AI Logic & Frontend Engineer):** 
-*   **รับผิดชอบ:** Phase 2, Phase 3 และ Phase 5
-*   **งานหลัก:** เขียนลอจิกการคำนวณ (อัลกอริทึมจัดตาราง) และเชื่อมต่อ Webhook ของ LINE
-*   **โฟลเดอร์ทำงาน:** `/logic_engine`, `/frontend`
+### PHASE 2: CORE AI LOGIC DEVELOPMENT
+**Goal:** Create a program to check conditions and generate schedules.
+*   **TASK 2.1: Prerequisite Checker**
+    *   Write logic to receive student Transcript data (Mock Data) to check if they have passed prerequisite courses, preventing out-of-sequence registration.
+*   **TASK 2.2: Degree Audit (Credit Basket)**
+    *   Count the completed credits for major, minor, and GE courses, and calculate how many credits are still required in each category.
+*   **TASK 2.3: Smart Schedule Builder**
+    *   An algorithm to match "required courses" with "available schedules for the current semester," ensuring class times do not overlap.
+
+### PHASE 3: ADVANCED FEATURES DEVELOPMENT
+**Goal:** Address actual pain points during the registration period.
+*   **TASK 3.1: Exam Clash Detector**
+    *   Add logic to scan "midterm/final exam schedules" to filter out courses with overlapping exam times.
+*   **TASK 3.2: Plan B Suggester**
+    *   A system to immediately prepare fallback options within the same GE category in case the target section is full.
+*   **TASK 3.3: Graduation Mock-up**
+    *   A Checklist script summarizing the status before requesting graduation.
+
+### PHASE 4: INTEGRATION & API
+**Goal:** Connect all the logic together to make it accessible.
+*   **TASK 4.1: Build RESTful API (FastAPI)**
+    *   Wrap the code from Phase 2 & 3 with `FastAPI` to create Endpoints to receive commands (e.g., `/api/schedule`, `/api/audit`).
+*   **TASK 4.2: AI Controller**
+    *   Write a Prompt to wrap the system, allowing the AI to translate students' natural language commands and call the correct API.
+
+### PHASE 5: FRONTEND & UX
+**Goal:** Create an interface for real user interaction.
+*   **TASK 5.1: LINE Chatbot Setup**
+    *   Create a LINE Official Account and connect the Webhook to our API (via `ngrok` for local testing or deploy on Render/Heroku).
+*   **TASK 5.2: Transcript Uploader (LIFF / Web App)**
+    *   Create a small webpage (HTML/JS) for students to upload their PDF files (Transcript) for processing.
 
 ---
 
-## 🚀 เริ่มต้นทำงาน (Getting Started)
-1. Clone Repository นี้ลงเครื่อง
-2. รันคำสั่ง `python -m venv venv` เพื่อสร้าง Virtual Environment
-3. รันคำสั่ง `pip install -r requirements.txt` (สร้างไฟล์นี้ในภายหลังเมื่อเริ่มเขียนโค้ด)
+## 👥 TASK DELEGATION (For a 2-person team)
+To work in parallel and reduce Git Conflicts, the following delegation is recommended:
+
+**🧑‍💻 PERSON 1 (Data & Backend Engineer):** 
+*   **Responsibilities:** Phase 1 and Phase 4
+*   **Main Tasks:** Ensure we have an accurate JSON database and write APIs to receive commands.
+*   **Working Folders:** `/data_pipeline`, `/api`
+
+**🧑‍💻 PERSON 2 (AI Logic & Frontend Engineer):** 
+*   **Responsibilities:** Phase 2, Phase 3, and Phase 5
+*   **Main Tasks:** Write the calculation logic (scheduling algorithms) and connect the LINE Webhook.
+*   **Working Folders:** `/logic_engine`, `/frontend`
+
+---
+
+## 🚀 GETTING STARTED
+1. Clone this Repository to your local machine.
+2. Run the command `python -m venv venv` to create a Virtual Environment.
+3. Run the command `pip install -r requirements.txt` (create this file later when you start writing code).
