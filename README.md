@@ -1,4 +1,4 @@
-🎓 **Education:** 
+# **Education:** 
 [B.Sc. in Data Science](https://www.ds.science.cmu.ac.th/enroll4ds/) 
 — Chiang Mai University
 
