@@ -1,3 +1,9 @@
+🎓 **Education:** 
+[B.Sc. in Data Science](https://www.ds.science.cmu.ac.th/enroll4ds/) 
+— Chiang Mai University
+
+
+
 # 🎓 CMU SMART SCHEDULER (AI CHATBOT)
 **An Intelligent Assistant System for Educational Planning and Course Scheduling at Chiang Mai University**
 
@@ -77,3 +83,4 @@ To work in parallel and reduce Git Conflicts, the following delegation is recomm
 1. Clone this Repository to your local machine.
 2. Run the command `python -m venv venv` to create a Virtual Environment.
 3. Run the command `pip install -r requirements.txt` (create this file later when you start writing code).
+
